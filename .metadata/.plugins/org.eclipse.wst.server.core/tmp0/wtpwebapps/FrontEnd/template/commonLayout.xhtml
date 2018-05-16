@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:head>
+	<title>
+		<ui:insert name="title"></ui:insert> - Archangelus</title>
+
+	<link rel="shortcut icon" href="../img/favicon.png" />
+
+	<h:outputStylesheet library="css" name="bootstrap.min.css" />
+	<h:outputStylesheet library="css" name="styles.css" />
+	
+	
+	<ui:insert name="css"></ui:insert>
+
+</h:head>
+
+<h:body>
+
+	<nav class="menu navbar navbar-expand-lg navbar-toggleable-md navbar-light ">
+		<div class="container">
+
+			<h:link outcome="index" styleClass="navbar-brand">
+				<h:graphicImage value="../img/logo.png" outcome="index" styleClass="d-inline-block align-top" />
+			</h:link>
+
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+			    aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto col-md-4">
+					<li class="nav-item md-3">
+						<h:link value="Inicio" outcome="index" styleClass="#{view.viewId.contains('/index') ? 'nav-link active' : 'nav-link'}" />
+					</li>
+					<c:if test="#{empty user}">
+						<li class="nav-item">
+							<h:link value="Login" outcome="login" styleClass="#{view.viewId.contains('/login') ? 'nav-link active' : 'nav-link'}" />
+						</li>
+					</c:if>
+					<c:if test="#{not empty user}">
+						<c:if test="#{user.tipo ne 'Paciente'}">
+							<li class="nav-item">
+								<h:link value="Pacientes" outcome="pacientes" styleClass="#{view.viewId.contains('paciente') ? 'nav-link active' : 'nav-link'}"
+								/>
+							</li>
+						</c:if>
+						<c:if test="#{user.tipo eq 'Admin'}">
+							<li class="nav-item">
+								<h:link value="Medicos" outcome="medicos" styleClass="#{view.viewId.contains('/medico') ? 'nav-link active' : 'nav-link'}"
+								/>
+							</li>
+						</c:if>
+						<li class="nav-item">
+							<h:link value="Relatorios" outcome="relatorios" styleClass="#{view.viewId.contains('/relatorio') ? 'nav-link active' : 'nav-link'}"
+							/>
+						</li>
+					</c:if>
+				</ul>
+
+				<ui:insert name="navbar-right"></ui:insert>
+
+				<c:if test="#{not empty user}">
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+								Adriano </a>
+							<div class="dropdown-menu">
+								<h:form>
+									<h:commandButton action="#{loginBean.logout}" styleClass="dropdown-item" value="Sair" />
+								</h:form>
+							</div>
+						</li>
+					</ul>
+				</c:if>
+			</div>
+		</div>
+	</nav>
+
+	<div>
+		<div class="wrapper container mt-5">
+			<ui:insert name="content">
+			</ui:insert>
+		</div>
+		
+		<footer>
+			<div class="footer-copyright py-3 text-center">
+				&copy; 2018 <h:link value="Archangelus" outcome="index" />
+			</div>
+		</footer>
+	</div>
+
+	<h:outputScript library="js" name="jquery-3.3.1.min.js" />
+	<h:outputScript library="js" name="popper.min.js" />
+	<h:outputScript library="js" name="bootstrap.min.js" />
+	
+</h:body>
+
+</html>

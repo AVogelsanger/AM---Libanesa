@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core" xmlns:a="http://xmlns.jcp.org/jsf/passthrough" xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="template/commonLayout.xhtml">
+    <ui:define name="title">Lista de pacientes</ui:define>
+    
+    <ui:define name="navbar-right">
+        <h:form styleClass="form-inline my-2 my-lg-0">
+            <h:inputText id="busca" styleClass="form-control mr-sm-2" value="#{pacienteBean.busca}" a:placeholder="Buscar por pacientes" />
+            
+            <h:commandButton action="#{pacienteBean.buscar}" styleClass="btn btn-outline-success my-2 my-sm-0" value="Buscar" />
+        </h:form>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:messages errorClass="alert alert-danger" infoClass="alert alert-success" />
+        
+        <h:link value="Cadastrar paciente" outcome="paciente" styleClass="btn btn-primary float-right mt-2" />
+	        
+        <c:if test="#{user ne null and user.tipo.equals('Medico')}">
+	        <h:link value="Associar paciente" outcome="associar_paciente" styleClass="btn btn-primary float-right mt-2 mr-2" />
+        </c:if>
+        
+        <h1>Lista de pacientes</h1>
+        
+        <h:dataTable styleClass="table" value="#{pacienteBean.all}" var="p">
+            <h:column>
+                <f:facet name="header">Codigo</f:facet>
+                #{p.codigo}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nome</f:facet>
+                #{p.nome}
+            </h:column>
+            <h:column>
+                <f:facet name="header">E-mail</f:facet>
+                #{p.email}
+            </h:column>
+            <h:column>
+                <f:facet name="header">CPF</f:facet>
+                #{p.cpf}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Data de nascimento</f:facet>
+                <h:outputText value="#{p.dataNascimento.time}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Plano de saúde</f:facet>
+                #{p.plano}
+            </h:column>
+
+            <h:column>
+                <h:form>
+                    <h:commandButton styleClass="mr-2 btn btn-outline-primary btn-sm" action="relatorios" value="Relatorios">
+                        <f:setPropertyActionListener value="#{p}" target="#{relatorioBean.paciente}" />
+                    </h:commandButton>
+                
+                    <h:commandButton styleClass="mr-2 btn btn-outline-primary btn-sm" action="paciente" value="Editar">
+                        <f:setPropertyActionListener value="#{p}" target="#{pacienteBean.paciente}" />
+                    </h:commandButton>
+
+                    <h:commandButton styleClass="btn btn-outline-danger btn-sm" action="#{pacienteBean.excluir(p.codigo)}" value="Remover" />
+                </h:form>
+            </h:column>
+        </h:dataTable>
+        
+        <div class="mt-3">
+        	<p>Caso voce esteja logado como medico, podera cadastrar um paciente ja associado ao login do mesmo, ou associar manualmente clicando no botao associar.</p>
+        	<p>Essa tela e a busca de paciente exibira somente os pacientes associados ao medico logado, ja o admin podera ver dados de todos.</p>
+        	<p>Nao foi adicionado botao de associar para o administrador escolher o medico e paciente porque direto dava o erro ORA-02391: exceeded simultaneous SESSIONS_PER_USER limit se chamasse dois webservices ao mesmo tempo impedindo acesso ao banco da FIAP por alguns minutos.</p>
+        </div>
+    </ui:define>
+</ui:composition>
+
+</html>

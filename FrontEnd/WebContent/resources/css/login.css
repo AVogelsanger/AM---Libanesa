@@ -1,0 +1,15 @@
+.menu {
+	display: none;
+}
+
+body {
+	background-image: url("../../img/background.png");
+	background-repeat: no-repeat;
+	background-position: right top;
+	background-attachment: fixed;
+	background-size: cover;
+}
+
+.wrapper {
+	min-height: calc(100vh - 48px);
+}

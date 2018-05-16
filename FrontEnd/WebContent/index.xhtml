@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="template/commonLayout.xhtml">
+	<ui:define name="title">Inicio</ui:define>
+
+	<ui:define name="content">
+		<h2>Inicio</h2>
+
+		<div class="mt-2">
+			<p>Bem-vindo ao Anchangelus!</p>
+
+			<p>Ha tres tipos de usuario: admin, medico e paciente.</p>
+
+
+			<p>O admin pode cadastrar medicos e pacientes, o medico pode cadastrar pacientes e o paciente pode cadastrar relatorios.</p>
+
+			<p>O sistema possui relatorios de diversos aparelhos, como medidor de pressao, que com auxilio de IOT, podem enviar uma requisicao
+				POST para:</p>
+
+			<code>http://localhost:8080/WebService/rest/relatorios</code>
+			
+			<p class="mt-3">Com corpo:</p>
+			
+			<code>
+				<pre class="alert alert-dark">
+{
+	"valor": 200.0,
+	"notas": "Um copo de 200ml as 15:00",
+	"tipo": "AGUA",
+	"data": 1526083200000,
+	"paciente": {
+		"codigo": 3
+	}
+}
+				</pre>
+			</code>
+
+			<p>Assim atualizando automaticamente os dados do paciente, tambem possui um app no qual o usuario pode inserir os resultados
+				manualmente.
+			</p>
+
+			<p>Nao estao sendo usados acentos nos projetos devido aos problemas do Eclipse.</p>
+			
+			<p>Por causa da materia ainda nao ter chegado em permissoes de login, nao ha bloqueios caso um usuario tente acessar algo que ele nao tenha permissao no webservice, criptografia de senhas ou algumas validações.</p>
+		</div>
+	</ui:define>
+</ui:composition>
+
+</html>

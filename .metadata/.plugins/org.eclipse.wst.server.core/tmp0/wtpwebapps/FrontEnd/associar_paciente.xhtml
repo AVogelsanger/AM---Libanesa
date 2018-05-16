@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core" xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+<ui:composition template="template/commonLayout.xhtml">
+    <ui:define name="title">Associar paciente</ui:define>
+    
+    <ui:define name="navbar-right">
+        <h:form styleClass="form-inline my-2 my-lg-0">
+            <h:inputText id="busca" styleClass="form-control mr-sm-2" value="#{pacienteBean.busca}" a:placeholder="Buscar por pacientes" />
+            
+            <h:commandButton action="#{pacienteBean.buscar}" styleClass="btn btn-outline-success my-2 my-sm-0" value="Buscar" />
+        </h:form>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:messages errorClass="alert alert-danger" infoClass="alert alert-success" />
+
+        <h1>Associar paciente</h1>
+
+        <h:form id="form">
+            <div class="form-group">
+                <h:outputLabel value="Paciente" for="paciente" />
+                <h:selectOneMenu id="paciente" styleClass="form-control" value="#{medicoBean.associarPacienteId}">
+                    <f:selectItems value="#{medicoBean.allPacientes}" var="p" itemValue="#{p.codigo}" itemLabel="#{p.nome}" />
+                </h:selectOneMenu>
+            </div>
+
+            <h:commandButton action="#{medicoBean.associarPaciente}" styleClass="btn btn-success mb-3" value="Salvar" />
+        </h:form>
+            	<ui:include src="template/footerLayout.xhtml" />
+    </ui:define>
+</ui:composition>
+
+</html>

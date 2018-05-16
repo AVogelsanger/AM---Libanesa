@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core" xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+<ui:composition template="template/commonLayout.xhtml">
+    <ui:define name="title">Lista de medicos</ui:define>
+    
+    <ui:define name="navbar-right">
+        <h:form styleClass="form-inline my-2 my-lg-0">
+            <h:inputText id="busca" styleClass="form-control mr-sm-2" value="#{medicoBean.busca}" a:placeholder="Buscar por medicos" />
+            
+            <h:commandButton action="#{pacienteBean.buscar}" styleClass="btn btn-outline-success my-2 my-sm-0" value="Buscar" />
+        </h:form>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:messages errorClass="alert alert-danger" infoClass="alert alert-success" />
+        
+        <h:link value="Cadastrar medico" outcome="medico" styleClass="btn btn-primary float-right mt-2" />
+        <h1>Lista de medicos</h1>
+        
+        <h:dataTable styleClass="table" value="#{medicoBean.all}" var="m">
+            <h:column>
+                <f:facet name="header">Codigo</f:facet>
+                #{m.codigo}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nome</f:facet>
+                #{m.nome}
+            </h:column>
+            <h:column>
+                <f:facet name="header">E-mail</f:facet>
+                #{m.email}
+            </h:column>
+            <h:column>
+                <f:facet name="header">CPF</f:facet>
+                #{m.cpf}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Especialidade</f:facet>
+                #{m.especialidade}
+            </h:column>
+            <h:column>
+                <f:facet name="header">CRM</f:facet>
+                #{m.crm}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Data de nascimento</f:facet>
+                <h:outputText value="#{m.dataNascimento.time}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </h:column>
+
+            <h:column>
+                <h:form>
+                    <h:commandButton styleClass="mr-2 btn btn-outline-primary btn-sm" action="medico" value="Editar">
+                        <f:setPropertyActionListener value="#{m}" target="#{medicoBean.medico}" />
+                    </h:commandButton>
+
+                    <h:commandButton styleClass="btn btn-outline-danger btn-sm" action="#{medicoBean.excluir(m.codigo)}" value="Remover" />
+                </h:form>
+            </h:column>
+        </h:dataTable>
+    </ui:define>
+</ui:composition>
+
+</html>

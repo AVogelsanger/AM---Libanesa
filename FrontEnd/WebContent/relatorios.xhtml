@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+<ui:composition template="template/commonLayout.xhtml">
+    <ui:define name="title">Lista de relatorios</ui:define>
+
+    <ui:define name="navbar-right">
+        <h:form styleClass="form-inline my-2 my-lg-0">
+            <h:inputText id="busca" styleClass="form-control mr-sm-2" value="#{relatorioBean.busca}" a:placeholder="Buscar por notas"
+            />
+
+            <h:commandButton action="#{pacienteBean.buscar}" styleClass="btn btn-outline-success my-2 my-sm-0" value="Buscar" />
+        </h:form>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:messages errorClass="alert alert-danger" infoClass="alert alert-success" />
+        
+        <c:if test="#{user.tipo.equals('Paciente')}">
+            <h:link value="Cadastrar relatorio" outcome="relatorio" styleClass="btn btn-primary float-right mt-2" />
+        </c:if>
+
+        <c:choose>
+            <c:when test="#{relatorioBean.paciente.codigo eq 0}">
+                <h1>Lista de relatorios</h1>
+            </c:when>
+            <c:otherwise>
+                <h1>Lista de relatorios de #{relatorioBean.paciente.nome}</h1>
+            </c:otherwise>
+        </c:choose>
+
+        <h:dataTable styleClass="table" value="#{relatorioBean.all}" var="r">
+            <h:column>
+                <f:facet name="header">Codigo</f:facet>
+                #{r.codigo}
+            </h:column>
+            <c:if test="#{!user.tipo.equals('Paciente')}">
+                <h:column>
+                    <f:facet name="header">Paciente</f:facet>
+                    #{r.pacienteTO.nome}
+                </h:column>
+            </c:if>
+            <h:column>
+                <f:facet name="header">Tipo</f:facet>
+                #{r.tipo}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Valor</f:facet>
+                #{r.valor}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Notas</f:facet>
+                #{r.notas}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Data</f:facet>
+                <h:outputText value="#{r.data.time}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </h:column>
+
+            <h:column>
+                <h:form>
+                    <h:commandButton styleClass="mr-2 btn btn-outline-primary btn-sm" action="relatorio" value="Editar">
+                        <f:setPropertyActionListener value="#{r}" target="#{relatorioBean.relatorio}" />
+                    </h:commandButton>
+
+                    <h:commandButton styleClass="btn btn-outline-danger btn-sm" action="#{relatorioBean.excluir(r.codigo)}" value="Remover" />
+                </h:form>
+            </h:column>
+        </h:dataTable>
+        
+        <div class="mt-3">
+        	<p>Caso voce esteja logado como medico, podera ver e buscar somente os relatorioas de pacientes associados ao medico logado, ja o admin pode ver todos.</p>
+        </div>
+    </ui:define>
+</ui:composition>
+
+</html>

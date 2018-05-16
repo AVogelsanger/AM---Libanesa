@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+<ui:composition template="template/commonLayout.xhtml">
+	<ui:define name="css">
+		<h:outputStylesheet library="css" name="login.css" />
+	</ui:define>
+
+	<ui:define name="title">Login</ui:define>
+
+	<ui:define name="content">
+			<h:messages errorClass="alert alert-danger"
+				infoClass="alert alert-success" />
+
+			<h:form>
+				<div class="form-signin">
+					<h:graphicImage value="../img/icon.png" outcome="index"
+						styleClass="profile-img" />
+					<h:inputText id="email" value="#{loginBean.email}"
+						a:placeholder="E-mail" styleClass="form-control" />
+					<h:inputSecret id="senha" value="#{loginBean.senha}"
+						a:placeholder="Senha" styleClass="form-control" />
+					<h:commandButton action="#{loginBean.logar}"
+						styleClass="btn btn-lg btn-default btn-block" value="Entrar" />
+				</div>
+			</h:form>
+		<div class="alert alert-light">
+			<p>
+				Lista de usuarios padrao (rode o arquivo PopularBanco.java):
+			</p>
+		
+			<p>
+				Login: admin@archangelus.com<br /> Senha: admin
+			</p>
+			<p>
+				Login: medico@archangelus.com<br /> Senha: medico
+			</p>
+			<p>
+				Login: paciente@archangelus.com<br /> Senha: paciente
+			</p>
+			
+			<p>
+				Caso as credenciais acima nao funcionem:
+				
+				<ul>
+					<li>Verifique se o WebService esta rodando.</li>
+					<li>Erro "exceeded simultaneous SESSIONS_PER_USER limit" do banco de dados, tente mudar os dados no persistence.xml e reiniciar o WebService.</li>
+				</ul>
+			</p>
+		</div>
+	</ui:define>
+</ui:composition>
+
+</html>

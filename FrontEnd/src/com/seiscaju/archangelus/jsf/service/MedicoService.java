@@ -1,0 +1,142 @@
+package com.seiscaju.archangelus.jsf.service;
+
+import java.util.Arrays;
+import java.util.List;
+
+import javax.ws.rs.core.MediaType;
+
+import com.seiscaju.archangelus.jsf.to.MedicoTO;
+import com.seiscaju.archangelus.jsf.to.RelatorioTO;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+
+public class MedicoService implements Service<MedicoTO, Integer> {
+	
+	//private static String URL = "http://localhost:8080/WebService/rest/medicos";
+	private static String URL = "http://localhost:8080/06-WS-Restful-Server/rest/medicos";
+	private Client client = Client.create();
+	
+	@Override
+	public void remover(Integer id) throws Exception {
+		WebResource resource = client.resource(URL)
+				.path(String.valueOf(id));
+		ClientResponse response = resource
+				.delete(ClientResponse.class);
+		
+		if (response.getStatus() != 204) {
+			throw new Exception("Erro " + response.getStatus());
+		}
+	}
+	
+	@Override
+	public void atualizar(MedicoTO medico) throws Exception {
+		WebResource resource = client.resource(URL)
+			.path(String.valueOf(medico.getCodigo()));
+		
+		ClientResponse response =
+			resource.type(MediaType.APPLICATION_JSON)
+			.put(ClientResponse.class,medico);
+		
+		if (response.getStatus() != 200) {
+			throw new Exception("Erro " + response.getStatus());
+		}
+	} 
+	
+	@Override
+	public List<MedicoTO> listar() throws Exception {
+		WebResource resource = client.resource(URL);
+		ClientResponse response = resource
+			.accept(MediaType.APPLICATION_JSON)
+			.get(ClientResponse.class);
+		
+		if (response.getStatus() != 200) {
+			throw new Exception("Erro " + response.getStatus());
+		}
+		
+		return Arrays.asList(
+			response.getEntity(MedicoTO[].class));
+	}
+	
+	public List<MedicoTO> buscaPorNome(String nome) throws Exception {
+		WebResource resource = client.resource(URL + "/busca/" + nome);
+		ClientResponse response = resource
+			.accept(MediaType.APPLICATION_JSON)
+			.get(ClientResponse.class);
+		
+		if (response.getStatus() != 200) {
+			throw new Exception("Erro " + response.getStatus());
+		}
+		
+		return Arrays.asList(
+			response.getEntity(MedicoTO[].class));
+	}
+	
+	@Override
+	public MedicoTO buscar(Integer id) throws Exception {
+		WebResource resource = client.resource(URL)
+							.path(String.valueOf(id));
+		
+		ClientResponse response = resource
+			.accept(MediaType.APPLICATION_JSON)
+			.get(ClientResponse.class);
+		
+		if (response.getStatus() != 200) {
+			throw new Exception("Erro " + response.getStatus());
+		}
+		
+		return response.getEntity(MedicoTO.class);
+	}
+
+	@Override
+	public void cadastrar(MedicoTO medico) throws Exception {
+		WebResource resource = client.resource(URL);
+		
+		ClientResponse response = resource
+				.type(MediaType.APPLICATION_JSON)
+				.post(ClientResponse.class, medico);
+
+		if (response.getStatus() != 201) {
+			throw new Exception("Erro: " + response.getStatus());
+		} 
+	}
+
+	public void associar(int medicoId, int pacienteId) throws Exception {
+		WebResource resource = client.resource(URL + "/associar/medico/" + medicoId + "/paciente/" + pacienteId);
+		
+		ClientResponse response = resource
+				.type(MediaType.APPLICATION_JSON)
+				.post(ClientResponse.class);
+
+		if (response.getStatus() != 200) {
+			throw new Exception("Erro: " + response.getStatus());
+		} 
+	}
+
+	public void desassociar(int medicoId, int pacienteId) throws Exception {
+		WebResource resource = client.resource(URL + "/desassociar/medico/" + medicoId + "/paciente/" + pacienteId);
+		
+		ClientResponse response = resource
+				.type(MediaType.APPLICATION_JSON)
+				.delete(ClientResponse.class);
+
+		if (response.getStatus() != 204) {
+			throw new Exception("Erro: " + response.getStatus());
+		} 
+	}
+
+	public List<RelatorioTO> listarRelatorios(Integer id) throws Exception {
+		WebResource resource = client.resource(URL + "/" + id + "/relatorios");
+		ClientResponse response = resource
+			.accept(MediaType.APPLICATION_JSON)
+			.get(ClientResponse.class);
+		
+		if (response.getStatus() != 200) {
+			throw new Exception("Erro " + response.getStatus());
+		}
+		
+		return Arrays.asList(
+			response.getEntity(RelatorioTO[].class));
+	}
+
+}
